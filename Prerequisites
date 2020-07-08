@@ -1,0 +1,23 @@
+Pre-Requisites
+    • Development Environment to be created by using the basic tools. i.e. Kops CLI, Docker and Kubectl 
+    • Download and Install latest version of KOPS CLI
+    • Correct version of Kubernetes binary distribution is needed for creating a cluster. This can be made easy by using KOPS CLI, which takes care of downloading the right Kubernetes binary in the cloud, and provisions the cluster. 
+Run the Below commands to Install kubectl 
+$ curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl 
+$ chmod +x ./kubectl 
+$ sudo mv ./kubectl /usr/local/bin/kubectl 
+Run the Below commands to Install kops 
+$ wget https://github.com/kubernetes/kops/releases/download/1.6.1/kops-linux-amd64 
+$ chmod +x kops-linux-amd64 
+$ sudo mv kops-linux-amd64 /usr/local/bin/kops 
+Run the Below commands to Install Docker 
+$ sudo apt-get install docker.io 
+Create role in AWS IAM service and provide needful permissions 
+Using the AWS IAM security service, create IAM user and provide sufficient permission to the User to create the Kubernetes cluster.  
+The IAM user must have the following permissions: 
+    • AmazonEC2FullAccess 
+    • AmazonRoute53FullAccess 
+    • AmazonS3FullAccess 
+    • IAMFullAccess 
+    • AmazonVPCFullAccess
+ 
