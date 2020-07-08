@@ -1,0 +1,44 @@
+Create the Kubernetes cluster
+The Kops CLI can be used to create a highly available cluster, with multiple master nodes spread across multiple Availability Zones. Workers can be spread across multiple zones as well. Some of the tasks that happen behind the scene during cluster creation are:
+Provisioning EC2 instances
+Setting up AWS resources such as networks, Auto Scaling groups, IAM users, and security groups
+Installing Kubernetes.
+Initiate the Kubernetes cluster creation using the following command:
+$ kops create cluster --cloud=aws --zones=us-east-1d,us-east-1b --master-count=3 --master-size=t2.micro --node-size=t2.micro --name=kopspoc.tk --vpc=vpc-b2765dc9 --subnets=subnet-0151be78e72135f0d,subnet-0bb6dbd407cb5b645 --utility-subnets=subnet-093a2a5a2146c49ce,subnet-0321765e77271a33b --dns-zone=kopspoc.tk --dns=private --topology=private --networking=calico
+Note: Legends used in the above command described as below:
+--zones=Defines the zones in which the cluster is going to be created. Multiple comma-separated zones can be specified to span the cluster across multiple zones.
+--name=Defines the cluster’s name.
+--state=Points to the S3 bucket that is the state store.
+--dns private=If you are using a private hosted zone.
+--yes=Immediately creates the cluster. Otherwise, only the cloud resources are created and the cluster needs to be started explicitly using the command kops update --yes. If the cluster needs to be edited, then the kops edit cluster command can be used.
+--networking calico=pod cidr networking managed by the networking plugin calico
+--vpc=The vpc range provided
+--subnets=The private subnets provided inside which the cluster will exist along with the required availability zones.
+
+
+
+
+
+
+This starts a three master nodes in two different availability zones and two worker nodes in two different availability zones forming a high availability Kubernetes cluster.
+The masters are in an Auto Scaling group and the worker nodes are in a separate group.
+By default, as mentioned in the command the master node size is t2.micro and the worker node size is t2.micro.
+Master and worker nodes are assigned separate IAM roles as well.
+Now to actually create cluster run the following command:
+$ kops update cluster kopspoc.tk –yes
+Note: kopspoc.tk is used as the cluster name
+This creates the auto scaling-groups, nodes etc. which can be observed in the output console.
+To review what all things going to happen while the above command is running; its needed to run the above command without –yes option. Without –yes option, will keep printing the action to be performed without actually doing it. (i.e. perform a dry run)
+The cluster components (i.e. Nodes) settings can be edited with one of the below commands:
+List clusters with: kops get cluster
+Edit this cluster with: kops edit cluster  kopspoc.tk
+Edit node instance group: kops edit ig --name= kopspoc.tk nodes
+Edit master instance group: kops edit ig --name= kopspoc.tk master-us-east-1d
+
+Run the commands as needed to make changes to the master and Node components. Wait for some time as it takes some time for the instances to boot and the DNS entries to be added in the hosted zone. Once everything is up; the Kubernetes nodes can be seen in the console. All these command should be run from the work station instance (i.e. Ubuntu box on which aws-cli and kubectl is setup):
+             The cluster settings can be edited with one of these commands:
+List clusters with:
+$ kops get cluster
+Edit this cluster with:
+$ kops edit cluster kopspoc.tk
+Here the added subnets: Private subnets are being used for the master and worker nodes for  high availability kubernetes cluster and Public subnets which are used for the loadbalancers to handle the traffic to the masters api.
