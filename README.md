@@ -10,8 +10,11 @@ Kubernetes clusters makes it easy to manage the multi-container and multi-host e
 
         2.1. About KOPS (Kubernetes Operations) 
 Kops (Kubernetes Operations), it's an open-source free tool which helps us to easily deploy and manage a HA (High Availability) Kubernetes cluster on different cloud providers. The provider we'll focus on here is AWS. 
-Kops, (Kubernetes Operations) is a set of tools for installing, operating, and deleting Kubernetes clusters in the cloud. It manages the cluster add-ons, versions and configuration. After the cluster is created, the usual kubectl CLI can be used to manage resources in the cluster. 
+
+Kops, (Kubernetes Operations) is a set of tools for installing, operating, and deleting Kubernetes clusters in the cloud. 
+It manages the cluster add-ons, versions and configuration. After the cluster is created, the usual kubectl CLI can be used to manage resources in the cluster. 
 Kops is an opinionated provisioning system: 
+
     • Fully automated installation 
     • Uses DNS to identify clusters 
     • Self-healing: everything runs in Auto-Scaling Groups 
